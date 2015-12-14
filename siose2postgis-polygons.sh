@@ -8,8 +8,8 @@ echo "Use this tool to read ESRI Shapefiles in every SIOSE archive."
 echo "Polygon data will be merged in a PostGIS table of the given"
 echo "PostgreSQL database using OGR."
 
-echo -e "\nThis tool depends on fuse-zip and GDAL. Run:"
-echo -e "\n$ apt-get install fuse-zip gdal-bin"
+echo -e "\nThis tool depends on fuse-zip, GDAL and psql. Run:"
+echo -e "\n$ apt-get install fuse-zip gdal-bin postgresql-client"
 echo -e "\nto install these packages on a Debian system."
 
 # Script args are handled using getopt.
