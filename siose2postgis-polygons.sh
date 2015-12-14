@@ -145,4 +145,6 @@ for filename in $DATA_FOLDER/*.zip; do
   echo "Unmounted $fuse_folder"
   echo "Elapsed time: $(($(date +'%s') - $load_start)) secs"
 done
+echo -e "\nVacuuming table $S.$T"
+PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w -c "VACUUM ANALYZE $S.$T" --quiet
 echo -e "Total elapsed time: $(($(date +'%s') - $START)) secs"
