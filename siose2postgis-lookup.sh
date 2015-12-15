@@ -134,7 +134,7 @@ START=$(date +'%s')
 ZIP_ARCHIVE=$1
 echo -e "\nReading $ZIP_ARCHIVE"
 fuse_folder=`mktemp -d --tmpdir .siose2postgis-XXX`
-echo "Mounting $filename to $fuse_folder"
+echo "Mounting $ZIP_ARCHIVE to $fuse_folder"
 fuse-zip -r $ZIP_ARCHIVE $fuse_folder
 for folder in $fuse_folder/*/; do
   for mdbfile in $folder/*.mdb; do
