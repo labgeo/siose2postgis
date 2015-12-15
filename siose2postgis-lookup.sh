@@ -5,7 +5,7 @@ echo -e "\nsiose2postgis-lookup"
 echo -e "\n=================================="
 echo -e "\nImport SIOSE lookup tables from a SIOSE ZIP archive."
 echo "Use this tool to read the MDB file in a SIOSE archive."
-echo "Data from T_SIOSE_COBERTURAS and T_SIOSE_ATRIBUTOS tables"
+echo "Data from TC_SIOSE_COBERTURAS and TC_SIOSE_ATRIBUTOS tables"
 echo "will be merged in corresponding replicated tables of the"
 echo "given PostgreSQL database using mdbtools."
 
@@ -101,10 +101,10 @@ if [ -n "${h:+1}" ]; then
   echo "  -P,--password[=PASSWORD]         PostgreSQL user password (required)"
   echo "  -S,--schema[=SCHEMANAME]         Database target schema (default is 'public')"
   echo "  -C,--coverages-lut[=TABLENAME]   Target lookup table name for coverages which"
-  echo "                                   data from T_SIOSE_COBERTURAS will be merged"
+  echo "                                   data from TC_SIOSE_COBERTURAS will be merged"
   echo "                                   in (default is 'siose_coverages')"
   echo "  -A,--attrs-lut[=TABLENAME]       Target lookup table name for atributes which"
-  echo "                                   data from T_SIOSE_COBERTURAS will be merged"
+  echo "                                   data from TC_SIOSE_ATRIBUTOS will be merged"
   echo "                                   in (default is 'siose_attributes')"
   echo "  -h,--help                        Show this help and exit"
   exit 4
@@ -141,24 +141,24 @@ for folder in $fuse_folder/*/; do
     echo "Reading $mdbfile"
     echo "Loading table T_SIOSE_COBERTURAS"
     load_start=$(date +'%s')
-    mdb-schema -T T_SIOSE_COBERTURAS -N $S --no-indexes --no-relations $mdbfile postgres | PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w --quiet
-    mdb-export -I postgres -N $S -b strip -q \' $mdbfile T_SIOSE_COBERTURAS | PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w --quiet
+    mdb-schema -T TC_SIOSE_COBERTURAS -N $S --no-indexes --no-relations $mdbfile postgres | PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w --quiet
+    mdb-export -I postgres -N $S -b strip -q \' $mdbfile TC_SIOSE_COBERTURAS | PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w --quiet
     echo "Elapsed time: $(($(date +'%s') - $load_start)) secs"
     echo "Loading table T_SIOSE_ATRIBUTOS"
     load_start=$(date +'%s')
-    mdb-schema -T T_SIOSE_ATRIBUTOS -N $S --no-indexes --no-relations $mdbfile postgres | PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w --quiet
-    mdb-export -I postgres -N $S -b strip -q \' $mdbfile T_SIOSE_ATRIBUTOS | PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w --quiet
+    mdb-schema -TC T_SIOSE_ATRIBUTOS -N $S --no-indexes --no-relations $mdbfile postgres | PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w --quiet
+    mdb-export -I postgres -N $S -b strip -q \' $mdbfile TC_SIOSE_ATRIBUTOS | PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w --quiet
     echo "Elapsed time: $(($(date +'%s') - $load_start)) secs"
   done
 done
 fusermount -zu $fuse_folder
 echo "Unmounted $fuse_folder"
 
-PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w -c "ALTER TABLE IF EXISTS $S.\"T_SIOSE_COBERTURAS\" RENAME TO $C" --quiet
+PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w -c "ALTER TABLE IF EXISTS $S.\"TC_SIOSE_COBERTURAS\" RENAME TO $C" --quiet
 echo -e "\nVacuuming table $S.$C"
 PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w -c "VACUUM ANALYZE $S.$C" --quiet
 
-PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w -c "ALTER TABLE IF EXISTS $S.\"T_SIOSE_ATRIBUTOS\" RENAME TO $A" --quiet
+PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w -c "ALTER TABLE IF EXISTS $S.\"TC_SIOSE_ATRIBUTOS\" RENAME TO $A" --quiet
 echo -e "\nVacuuming table $S.$A"
 PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w -c "VACUUM ANALYZE $S.$A" --quiet
 
