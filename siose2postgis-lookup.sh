@@ -139,14 +139,14 @@ fuse-zip -r $ZIP_ARCHIVE $fuse_folder
 for folder in $fuse_folder/*/; do
   for mdbfile in $folder/*.mdb; do
     echo "Reading $mdbfile"
-    echo "Loading table T_SIOSE_COBERTURAS"
+    echo "Loading table TC_SIOSE_COBERTURAS"
     load_start=$(date +'%s')
     mdb-schema -T TC_SIOSE_COBERTURAS -N $S --no-indexes --no-relations $mdbfile postgres | PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w --quiet
     mdb-export -I postgres -N $S -b strip -q \' $mdbfile TC_SIOSE_COBERTURAS | PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w --quiet
     echo "Elapsed time: $(($(date +'%s') - $load_start)) secs"
-    echo "Loading table T_SIOSE_ATRIBUTOS"
+    echo "Loading table TC_SIOSE_ATRIBUTOS"
     load_start=$(date +'%s')
-    mdb-schema -TC T_SIOSE_ATRIBUTOS -N $S --no-indexes --no-relations $mdbfile postgres | PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w --quiet
+    mdb-schema -T TC_SIOSE_ATRIBUTOS -N $S --no-indexes --no-relations $mdbfile postgres | PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w --quiet
     mdb-export -I postgres -N $S -b strip -q \' $mdbfile TC_SIOSE_ATRIBUTOS | PGPASSWORD=$P psql -h $s -p $p -d $D -U $U -w --quiet
     echo "Elapsed time: $(($(date +'%s') - $load_start)) secs"
   done
