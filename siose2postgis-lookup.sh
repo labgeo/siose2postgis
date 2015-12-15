@@ -136,7 +136,7 @@ echo -e "\nReading $ZIP_ARCHIVE"
 #load_start=$(date +'%s')
 fuse_folder=`mktemp -d --tmpdir .siose2postgis-XXX`
 echo "Mounting $filename to $fuse_folder"
-fuse-zip -r $filename $fuse_folder
+fuse-zip -r $ZIP_ARCHIVE $fuse_folder
 for folder in $fuse_folder/*/; do
   for mdbfile in $folder/*.mdb; do
     echo "Reading $mdbfile"
