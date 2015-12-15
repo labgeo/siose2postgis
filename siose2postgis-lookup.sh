@@ -111,7 +111,7 @@ if [ -n "${h:+1}" ]; then
 fi
 
 if [[ $# != 1 ]]; then
-    echo -e "\nMISSING ARGUMENT: A single input directory is required."
+    echo -e "\nMISSING ARGUMENT: A single input zip archive is required."
     exit 5
 fi
 
